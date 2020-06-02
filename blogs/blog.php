@@ -25,40 +25,41 @@ include('../private/header.php');
 <div class="container my-5">
 
   <div class="row">
-    <div class="col-md">
-      <h2 class="h1-responsive font-weight-bold pb-3"><?php echo h($blog['title']); ?></h2>
-    </div>
-  </div>
 
-  <div class="row">
+    <div class="col-md-8">
 
-    <div class="col-md-9">
+      <!-- Title -->
+      <h3 class="h3-responsive title_border"><?php echo h($blog['title']); ?></h2>
 
-      <div class="pl-3 author-border-left">
-        <!-- Username -->
-        <p class="m-0">by
-          <a href="/users/profile.php?id=<?php echo h(u($blog['user_id'])); ?>" class="font-weight-bold" title="All blogs by <?php echo h($blog['username']) ?>"><?php echo h($blog['username']); ?></a>
-        </p>
-        <!-- Create and update dates -->
-        <p class="text-muted font-italic">
-          <?php
-          $create_date = date('l d M Y, h:ia', strtotime(h($blog['create_date'])));
-          $update_date = date('l d M Y, h:i:sa', strtotime(h($blog['update_date'])));
-          echo $create_date;
-          // echo '<p>' . $update_date . '</p>';
-          if ( strtotime(h($blog['create_date'])) < strtotime(h($blog['update_date'])) ) {
-            $time_now = date('l d M Y, h:i:sa');
-            $seconds = strtotime($time_now) - strtotime($update_date);
-            echo " (Updated ";
-            echo "<a href='#' class='material-tooltip-main' data-toggle='tooltip' title='" . date('l d M Y, h:i:a', strtotime(h($blog['update_date']))) . "'>" . time_ago_en(time() - $seconds) . "</a>";
-            echo ")";
-          }
-          ?>
-        </p>
-      </div>
+      <!-- Username -->
+      <p>
+        <a href="/users/profile.php?id=<?php echo h(u($blog['user_id'])); ?>" class="font-weight-bold" title="All blogs by <?php echo h($blog['username']) ?>"><?php echo h($blog['username']); ?></a>
+        |
+        <?php
+        $create_date = date('l d M Y, h:ia', strtotime(h($blog['create_date'])));
+        $update_date = date('l d M Y, h:i:sa', strtotime(h($blog['update_date'])));
+        echo "<span class='text-muted'>" . $create_date;
+        if ( strtotime(h($blog['create_date'])) < strtotime(h($blog['update_date'])) ) {
+          $time_now = date('l d M Y, h:i:sa');
+          $seconds = strtotime($time_now) - strtotime($update_date);
+          echo " (Updated ";
+          echo "<a href='#' class='material-tooltip-main' data-toggle='tooltip' title='" . date('l d M Y, h:i:a', strtotime(h($blog['update_date']))) . "'>" . time_ago_en(time() - $seconds) . "</a>";
+          echo ")";
+        }
+        echo "</span>";
+        ?>
+      </p>
 
+      <?php
+      if ($blog['image']) { ?>
+        <div class="mb-4">
+          <!-- Image -->
+          <img class="img-fluid" src='<?php echo img_link(h($blog['image'])) ?>' alt="Card image cap">
+        </div>
+        <?php } ?>
+      <!-- Content -->
       <p id="content"><?php echo h($blog['content']); ?></p>
-
+      <!-- Update and delete buttons -->
       <?php
       if (isset($_SESSION['user_id']) && $blog['user_id'] === $_SESSION['user_id']) { ?>
         <a href="update.php?id=<?php echo h(u($blog['id'])); ?>" class="btn btn-primary btn-md">Update blog</a>
@@ -67,7 +68,7 @@ include('../private/header.php');
 
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-4 title_border">
 
       <div class="card border-light">
         <div class="card-header">Recent blogs by <?php echo h($blog['username']); ?></div>
@@ -77,7 +78,7 @@ include('../private/header.php');
             while($recent_blog = $recent_user_blogs->fetch_assoc()) {
               echo "<li class='list-group-item'><a href='/blogs/blog.php?id=" . h(u($recent_blog['id'])) . "' title= '" . h($recent_blog['title']) . "'>";
               // show the full title if the character length is less than 60. Otherwise show only the first 60 characters
-              echo strlen($recent_blog['title']) < 60 ? h($recent_blog['title']) : substr(h($recent_blog['title']), 0, 60) . '...';
+              echo strlen($recent_blog['title']) < 60 ? h($recent_blog['title']) : trim(substr(h($recent_blog['title']), 0, 60)) . '...';
               echo "</a></li>";
             }
             ?>
@@ -88,7 +89,6 @@ include('../private/header.php');
     </div>
 
   </div>
-
 </div>
 
 <?php include('../private/footer.php'); ?>

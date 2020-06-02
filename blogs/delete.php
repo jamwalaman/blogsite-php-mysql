@@ -18,8 +18,12 @@ if($blog == false || $blog->user_id !== $_SESSION['user_id']) {
 
 if(is_post_request()) {
 
-  // Delete admin
+  // Delete blog
   $result = $blog->delete();
+  // And if there's blog image, delete it from the uploads folder
+  if ($blog->image) {
+    unlink('../uploads/'.$blog->image);
+  }
   $session->message('Blog deleted successfully.');
   redirect_to('/');
 

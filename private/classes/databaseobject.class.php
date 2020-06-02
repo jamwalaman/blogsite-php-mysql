@@ -138,10 +138,12 @@ class DatabaseObject {
   // Properties which have database columns, excluding ID and create_date
   public function attributes() {
     $attributes = [];
+
     foreach(static::$db_columns as $column) {
       if($column == 'id' || $column == 'create_date' || $column =='update_date') { continue; }
       $attributes[$column] = $this->$column;
     }
+
     return $attributes;
   }
 

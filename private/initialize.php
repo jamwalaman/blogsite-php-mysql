@@ -2,6 +2,8 @@
 
   ob_start(); // turn on output buffering
 
+  date_default_timezone_set('Pacific/Auckland');
+
   require_once('functions.php');
   require_once('status_error_functions.php');
   require_once('db_credentials.php');

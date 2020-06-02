@@ -83,7 +83,7 @@ if(is_post_request()) {
             <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Sign in</button>
 
             <!-- Register -->
-            <p>Or <a href="/signup.php">Sign Up</a> </p>
+            <p>Or <a href="/users/signup.php">Sign Up</a> </p>
 
           </form>
           <!-- Form -->

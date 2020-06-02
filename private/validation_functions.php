@@ -9,14 +9,6 @@
     return !isset($value) || trim($value) === '';
   }
 
-  // has_presence('abcd')
-  // * validate data presence
-  // * reverse of is_blank()
-  // * I prefer validation names with "has_"
-  function has_presence($value) {
-    return !is_blank($value);
-  }
-
   // has_length_greater_than('abcd', 3)
   // * validate string length
   // * spaces count towards length

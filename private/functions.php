@@ -125,8 +125,18 @@ function no_blogs_found($options=[]) {
       $no_blogs_html .= '<a href="/users/login.php"> Login </a>to create a blog</a>';
     }
   }
-  $no_blogs_html .= '</p></div></div>';  
+  $no_blogs_html .= '</p></div></div>';
   return $no_blogs_html;
+}
+
+function img_link($img) {
+  $imgHTML = "../uploads/".$img;
+  return $imgHTML;
+}
+
+function upld_img_name($img) {
+  $imgname = $_SESSION['user_id'] . '_' . str_replace(' ', '_', $img);
+  return $imgname;
 }
 
 ?>

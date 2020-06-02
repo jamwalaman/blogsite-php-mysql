@@ -9,11 +9,16 @@ include('../private/header.php');
 if(is_post_request()) {
 
   // Create record using post parameters
+  if (!empty($_FILES['image']['name'])) {
+    $_POST['blog']['image'] = upld_img_name($_FILES['image']['name']);
+  }
   $blog = new Blog($_POST['blog']);
+  $blog->file($_FILES['image']);
   $result = $blog->save();
 
   if($result === true) {
     $new_id = $blog->id;
+    move_uploaded_file($_FILES['image']['tmp_name'],'../uploads/'.upld_img_name($_FILES['image']['name']));
     $session->message('Blog created successfully.');
     redirect_to('/blogs/blog.php?id=' . $new_id);
   } else {
@@ -49,7 +54,7 @@ if(is_post_request()) {
         <div class="card-body px-lg-5 pt-0">
 
           <!-- Form -->
-          <form novalidate class="text-center" style="color: #757575;" method="post" action="<?php echo h($_SERVER["PHP_SELF"]);?>">
+          <form novalidate class="text-center" style="color: #757575;" method="post" action="<?php echo h($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
 
             <?php include('form_fields.php'); ?>
 
