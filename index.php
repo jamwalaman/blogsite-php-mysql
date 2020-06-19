@@ -2,11 +2,6 @@
 include('private/initialize.php');
 $page_title = title('home');
 include('private/header.php');
-
-$sql = "SELECT blogs.id, user_id, username, title, content, image, create_date FROM users, blogs ";
-$sql .= "WHERE users.id = blogs.user_id ";
-$sql .= "ORDER BY create_date DESC";
-$blogs = Blog::sql_result($sql);
 ?>
 
 <div class="container my-5">
