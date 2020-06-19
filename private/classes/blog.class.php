@@ -90,12 +90,16 @@ class Blog extends DatabaseObject {
   }
 
   static public function find_all() {
-    $sql = "SELECT blogs.id, user_id, username, title, content, create_date FROM users, blogs ";
+    $sql = "SELECT blogs.id, user_id, username, title, content, image, create_date FROM users, blogs ";
     $sql .= "WHERE users.id = blogs.user_id ";
     $sql .= "ORDER BY create_date DESC";
     $result = static::sql_result($sql);
-    $row = $result->fetch_assoc();
-    return $result;
+    $blogs_list = [];
+    while ($blog = $result->fetch_assoc()) {
+      $blogs_list[] = $blog;
+    }
+    $result->free();
+    return $blogs_list;
   }
 
 }

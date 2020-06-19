@@ -2,9 +2,12 @@ body {
   padding-top: 60px;
 }
 
-/* Adds new line to the blog content, if there's one */
 #content {
   white-space: pre-wrap;
+}
+
+.home-link {
+  color: #000000;
 }
 
 .title_border::before {

@@ -139,4 +139,19 @@ function upld_img_name($img) {
   return $imgname;
 }
 
+function home_content($options=[]) {
+  global $blog;
+  $htag = $options["heading"] ?? "h5";
+  $excerpt = $options["excerpt"] ?? false;
+  $margin = $options["margin"] ?? false;
+  $length = $options["length"] ?? 330;
+  $content_html = "<$htag class='$htag-responsive $margin'><a href='/blogs/blog.php?id=" . h(u($blog['id'])) . "' class='home-link'>" . h($blog['title']) . "</a></$htag>";
+  $content_html .= "<a href='/users/profile.php?id=" . h(u($blog['user_id'])) . "' class='font-weight-bold' title='All blogs by" . h($blog['username']) . "'>";
+  $content_html .= h($blog['username']) . "</a> | " . date("d M Y", strtotime( h($blog['create_date']) ));
+  if ($excerpt) {
+    $content_html .= "<p>" . trim(substr(h($blog['content']), 0, $length)) . '...' . "</p>";
+  }
+  return $content_html;
+}
+
 ?>

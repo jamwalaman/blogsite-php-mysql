@@ -3,10 +3,9 @@ include('private/initialize.php');
 $page_title = title('home');
 include('private/header.php');
 
-$sql = "SELECT blogs.id, user_id, username, title, content, create_date FROM users, blogs ";
+$sql = "SELECT blogs.id, user_id, username, title, content, image, create_date FROM users, blogs ";
 $sql .= "WHERE users.id = blogs.user_id ";
-$sql .= "ORDER BY create_date DESC ";
-$sql .= "LIMIT 3 ";
+$sql .= "ORDER BY create_date DESC";
 $blogs = Blog::sql_result($sql);
 ?>
 
@@ -18,54 +17,47 @@ $blogs = Blog::sql_result($sql);
   }
   ?>
 
-  <!--Carousel Wrapper-->
-  <div id="carousel" class="carousel slide" data-ride="carousel">
-    <!--Indicators-->
-    <ol class="carousel-indicators">
-      <li data-target="#carousel" data-slide-to="0" class="active"></li>
-      <li data-target="#carousel" data-slide-to="1"></li>
-      <li data-target="#carousel" data-slide-to="2"></li>
-    </ol>
-    <!--/.Indicators-->
+  <div class="row excerpt_border">
 
-    <!--Slides-->
-    <div class="carousel-inner" role="listbox">
-
-      <?php
-      $count = 0;
-      while ($blog = $blogs->fetch_assoc()) {
-        $count++;
-      ?>
-
-      <div class="carousel-item <?php echo $count == 1 ? "active" : false ?>">
-
-          <div class="jumbotron purple lighten-4 m-2 text-center">
-            <h2 class="h2-responsive"><?php echo h($blog['title']) ?></h2>
-            <p class="author-bottom-border pb-3">by
-              <a href="/users/profile.php?id=<?php echo h(u($blog['user_id'])); ?>" class="font-weight-bold" title="All blogs by <?php echo h($blog['username']) ?>"><?php echo h($blog['username']); ?></a>,
-              <?php echo date("d/m/Y", strtotime( h($blog['create_date']) )); ?>
-            </p>
-            <p><?php echo substr(h($blog['content']), 0, 630) . "...<a href='/blogs/blog.php?id=" . h(u($blog['id'])) . "'>[read more]</a>"; ?></p>
-          </div>
-
-      </div>
-    <?php } ?>
-
+    <!-- Most recent blog -->
+    <div class="col-md-6">
+      <?php foreach(Blog::find_all() as $i => $blog) {
+        if ($blog['image'] && $i === 1) { ?>
+          <img class="img-fluid" src='<?php echo img_link(h($blog['image'])) ?>' alt="Blog image">
+          <?php echo home_content(["heading" => "h2", "excerpt" => true]);
+        }
+      } ?>
     </div>
-    <!--/.Slides-->
-    <!--Controls-->
-    <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-    <!--/.Controls-->
-  </div>
-  <!--/.Carousel Wrapper-->
+    <!-- More recent blogs -->
+    <div class="col-md-6">
+      <?php foreach(Blog::find_all() as $i => $blog) {
+        if ($blog['image'] && $i >=2) { ?>
+          <div class="row <?php echo $i === 3 ? "py-4" : false ?>">
+            <div class="col-md-6">
+              <img class="img-fluid" src='<?php echo img_link(h($blog['image'])) ?>' alt="Blog image">
+            </div>
+            <div class="col-md-6">
+              <?php echo home_content() ?>
+            </div>
+          </div><!-- end row -->
+        <?php if ($i === 4) break; }
+      } ?>
+    </div>
 
-</div>
+  </div><!-- end row -->
+
+  <!-- Even more recent blogs -->
+  <div class="row row-cols-1 row-cols-md-4 pt-4">
+    <?php foreach(Blog::find_all() as $i => $blog) {
+      if($blog['image'] && $i >= 4) { ?>
+        <div class="col mb-4">
+          <img class="img-fluid" src='<?php echo img_link(h($blog['image'])) ?>' alt="Blog image">
+          <?php echo home_content(["heading" => "h5", "excerpt" => true, "length" => 180, "margin" => "my-3"]) ?>
+        </div>
+      <?php if ($i === 11) break; }
+    } ?>
+  </div>
+
+</div><!-- end container -->
 
 <?php include('private/footer.php'); ?>
